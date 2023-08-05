@@ -75,7 +75,7 @@ if not imguicheck or not sampevcheck or not encodingcheck or not lfscheck or not
 				if progressbar and progressbar.max ~= nil and progressbar.downloadinglibname and progressbar.downloaded and progressbar.downloadingtheme then
 					local jj = (200-10)/progressbar.max
 					local downloaded = progressbar.downloadedvisual * jj
-					renderDrawBoxWithBorder(x, y-39, 200, 20, 0xFFFF6633, 1, 0xFF808080)
+					renderDrawBoxWithBorder(x, y-39, 200, 20, 0xFFffc17a, 1, 0xFF808080)
 					renderFontDrawText(GOVfont, 'GOV Helper', x+ 5, y - 37, 0xFFFFFFFF)
 					renderDrawBoxWithBorder(x, y-20, 200, 70, 0xFF1C1C1C, 1, 0xFF808080)
 					renderFontDrawText(progressfont, string.format('Скачивание: %s', progressbar.downloadingtheme), x + 5, y - 15, 0xFFFFFFFF)
@@ -88,7 +88,7 @@ if not imguicheck or not sampevcheck or not encodingcheck or not lfscheck or not
 			end
 		end)
 
-		sampAddChatMessage(('[GOVHelper]{EBEBEB} Началось скачивание необходимых файлов. Если скачивание не удастся, то обратитесь к {ff6633}vk.com/maks.weeb{ebebeb}.'),0xff6633)
+		sampAddChatMessage(('[GOVHelper]{EBEBEB} Началось скачивание необходимых файлов. Если скачивание не удастся, то обратитесь к {ffc17a}vk.com/maks.weeb{ebebeb}.'),0xffc17a)
 
 		if not imguicheck then -- Нашел только релизную версию в архиве, так что пришлось залить файлы сюда, при обновлении буду обновлять и у себя
 			print('{FFFF00}Скачивание: mimgui')
@@ -208,7 +208,7 @@ local configuration = inicfg.load({
 		tstovcprice = 100000,
 		RChatColor = 4282626093,
 		DChatColor = 4294940723,
-		COChatColor = 4281558783,
+		GOVChatColor = 4286235135,
 		monetstyle = -16729410,
 		monetstyle_chroma = 1.0,
 	},
@@ -251,7 +251,7 @@ local configuration = inicfg.load({
     	posX = 200,
     	posY = 400,
 
-    	col_title = 0xFFFF6633,
+    	col_title = 0xFFFFC17A,
     	col_default = 0xFFFFFFFF,
     	col_no_work = 0xFFAA3333,
     	col_afk_max = 0xFFFF0000,
@@ -543,7 +543,6 @@ local windows = {
 	imgui_lect						= new.bool(),
 	imgui_depart					= new.bool(),
 	imgui_changelog					= new.bool(configuration.main_settings.changelog),
-	imgui_fmstylechoose				= new.bool(configuration.main_settings.fmstyle == nil),
 	imgui_zametka					= new.bool(false),
 }
 local bindersettings = {
@@ -557,7 +556,7 @@ local bindersettings = {
 local chatcolors = {
 	RChatColor 						= vec4ToFloat4(imgui.ColorConvertU32ToFloat4(configuration.main_settings.RChatColor)),
 	DChatColor 						= vec4ToFloat4(imgui.ColorConvertU32ToFloat4(configuration.main_settings.DChatColor)),
-	COChatColor 					= vec4ToFloat4(imgui.ColorConvertU32ToFloat4(configuration.main_settings.COChatColor)),
+	GOVChatColor 					= vec4ToFloat4(imgui.ColorConvertU32ToFloat4(configuration.main_settings.GOVChatColor)),
 }
 local usersettings = {
 	createmarker 					= new.bool(configuration.main_settings.createmarker),
@@ -589,11 +588,6 @@ local pricelist = {
 	passdrprice 						= new.char[7](tostring(configuration.main_settings.passdrprice)),
 	visaprice 						= new.char[7](tostring(configuration.main_settings.visaprice)),
 	tstovcprice 						= new.char[7](tostring(configuration.main_settings.tstovcprice)),
-	gunaprice 						= new.char[7](tostring(configuration.main_settings.gunaprice)),
-	huntprice 						= new.char[7](tostring(configuration.main_settings.huntprice)),
-	kladprice						= new.char[7](tostring(configuration.main_settings.kladprice)),
-	taxiprice						= new.char[7](tostring(configuration.main_settings.taxiprice)),
-	mechprice						= new.char[7](tostring(configuration.main_settings.mechprice))
 }
 local tHotKeyData = {
 	edit 							= nil,
@@ -1139,7 +1133,7 @@ function changePosition(table)
 		}
 		ChangePos = true
 		sampSetCursorMode(4)
-		addNotify('Нажмите {MC}ЛКМ{WC}, чтобы сохранить\nместоположение, или {MC}ПКМ{WC},\nчтобы отменить', 5)
+		GOVHelperMessage('Нажмите {MC}ЛКМ{WC}, чтобы сохранить\nместоположение, или {MC}ПКМ{WC},\nчтобы отменить.')
 		while ChangePos do
 			wait(0)
 			local cX, cY = getCursorPos()
@@ -1149,14 +1143,14 @@ function changePosition(table)
 				while isKeyDown(0x01) do wait(0) end
 				ChangePos = false
 				sampSetCursorMode(0)
-				addNotify('Позиция сохранена!', 5)
+				GOVHelperMessage('Позиция сохранена!')
 			elseif isKeyDown(0x02) then
 				while isKeyDown(0x02) do wait(0) end
 				ChangePos = false
 				sampSetCursorMode(0)
 				table.posX = backup['x']
 				table.posY = backup['y']
-				addNotify('Вы отменили изменение\nместоположения', 5)
+			    GOVHelperMessage('Вы отменили изменение\nместоположения')
 			end
 		end
 		ChangePos = false
@@ -1261,7 +1255,7 @@ function imgui.TextColoredRGB(text,align)
 	local colors = style.Colors
 	local ImVec4 = imgui.ImVec4
 
-	local col = imgui.ColorConvertU32ToFloat4(configuration.main_settings.COChatColor)
+	local col = imgui.ColorConvertU32ToFloat4(configuration.main_settings.GOVChatColor)
 	local r,g,b,a = col.x*255, col.y*255, col.z*255, col.w*255
 	text = gsub(text, '{WC}', '{EBEBEB}')
 	text = gsub(text, '{MC}', format('{%06X}', bit.bor(bit.bor(b, bit.lshift(g, 8)), bit.lshift(r, 16))))
@@ -1631,8 +1625,8 @@ function imgui.HotKey(name, path, pointer, defaultKey, width)
 end
 
 function addNotify(msg, time)
-	local col = imgui.ColorConvertU32ToFloat4(configuration.main_settings.COChatColor)
-	local r,g,b = col.x*255, col.y*255, col.z*255
+	local col = imgui.ColorConvertU32ToFloat4(configuration.main_settings.GOVChatColor)
+	local r,g,b = col.x*251, col.y*255, col.z*255
 	msg = gsub(msg, '{WC}', '{SSSSSS}')
 	msg = gsub(msg, '{MC}', format('{%06X}', bit.bor(bit.bor(b, bit.lshift(g, 8)), bit.lshift(r, 16))))
 
@@ -1645,13 +1639,13 @@ local imgui_fm = imgui.OnFrame(
 		player.HideCursor = isKeyDown(0x12)
 		if not IsPlayerConnected(fastmenuID) then
 			windows.imgui_fm[0] = false
-			GOVHelperMessage('Игрок с которым Вы взаимодействовали вышел из игры!')
+			ASHelperMessage('Игрок с которым Вы взаимодействовали вышел из игры!')
 			return false
 		end
 		if configuration.main_settings.fmstyle == 0 then
 			imgui.SetNextWindowSize(imgui.ImVec2(300, 517), imgui.Cond.Always)
 			imgui.SetNextWindowPos(imgui.ImVec2(ScreenSizeX * 0.5 , ScreenSizeY * 0.5),imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
-			imgui.Begin(u8'Меню быстрого доступа', _, imgui.WindowFlags.NoResize + imgui.WindowFlags.NoBringToFrontOnFocus + imgui.WindowFlags.NoCollapse + (configuration.main_settings.noscrollbar and imgui.WindowFlags.NoScrollbar or imgui.WindowFlags.NoBringToFrontOnFocus))
+			imgui.Begin(u8'Меню быстрого доступа', _, imgui.WindowFlags.NoResize + imgui.WindowFlags.NoBringToFrontOnFocus + imgui.WindowFlags.NoCollapse + imgui.WindowFlags.NoScrollbar)
 				if imgui.IsWindowAppearing() then
 					windowtype[0] = 0
 				end
@@ -1664,62 +1658,69 @@ local imgui_fm = imgui.OnFrame(
 								sampSendChat('/stats')
 								if tonumber(os.date('%H', os.time(os.date('!*t')) + 2 * 60 * 60)) > 4 and tonumber(os.date('%H', os.time(os.date('!*t')) + 2 * 60 * 60)) < 13 then
 									sendchatarray(configuration.main_settings.playcd, {
-										{'Доброе утро, я {gender:сотрудник|сотрудница} Правительства, чем могу Вам помочь?', configuration.main_settings.replaceash and 'ГЦЛ' or 'Правительства г. Сан-Фиерро'},
+										{'Доброе утро, я {gender:сотрудник|сотрудница} %s, чем могу Вам помочь?', configuration.main_settings.replaceash and 'ГЦЛ' or 'Автошколы г. Сан-Фиерро'},
 										{'/do На груди висит бейджик с надписью %s %s.', configuration.RankNames[configuration.main_settings.myrankint], #configuration.main_settings.myname < 1 and gsub(sampGetPlayerNickname(select(2,sampGetPlayerIdByCharHandle(playerPed))), '_', ' ') or u8:decode(configuration.main_settings.myname)},
 									})
 								elseif tonumber(os.date('%H', os.time(os.date('!*t')) + 2 * 60 * 60)) > 12 and tonumber(os.date('%H', os.time(os.date('!*t')) + 2 * 60 * 60)) < 17 then
 									sendchatarray(configuration.main_settings.playcd, {
-										{'Добрый день, я {gender:сотрудник|сотрудница} Правительства, чем могу Вам помочь?', configuration.main_settings.replaceash and 'ГЦЛ' or 'Правительства г. Сан-Фиерро'},
+										{'Добрый день, я {gender:сотрудник|сотрудница} %s, чем могу Вам помочь?', configuration.main_settings.replaceash and 'ГЦЛ' or 'Автошколы г. Сан-Фиерро'},
 										{'/do На груди висит бейджик с надписью %s %s.', configuration.RankNames[configuration.main_settings.myrankint], #configuration.main_settings.myname < 1 and gsub(sampGetPlayerNickname(select(2,sampGetPlayerIdByCharHandle(playerPed))), '_', ' ') or u8:decode(configuration.main_settings.myname)},
 									})
 								elseif tonumber(os.date('%H', os.time(os.date('!*t')) + 2 * 60 * 60)) > 16 and tonumber(os.date('%H', os.time(os.date('!*t')) + 2 * 60 * 60)) < 24 then
 									sendchatarray(configuration.main_settings.playcd, {
-										{'Добрый вечер, я {gender:сотрудник|сотрудница} Правительства, чем могу Вам помочь?', configuration.main_settings.replaceash and 'ГЦЛ' or 'Правительства г. Сан-Фиерро'},
+										{'Добрый вечер, я {gender:сотрудник|сотрудница} %s, чем могу Вам помочь?', configuration.main_settings.replaceash and 'ГЦЛ' or 'Автошколы г. Сан-Фиерро'},
 										{'/do На груди висит бейджик с надписью %s %s.', configuration.RankNames[configuration.main_settings.myrankint], #configuration.main_settings.myname < 1 and gsub(sampGetPlayerNickname(select(2,sampGetPlayerIdByCharHandle(playerPed))), '_', ' ') or u8:decode(configuration.main_settings.myname)},
 									})
 								elseif tonumber(os.date('%H', os.time(os.date('!*t')) + 2 * 60 * 60)) < 5 then
 									sendchatarray(configuration.main_settings.playcd, {
-										{'Доброй ночи, я {gender:сотрудник|сотрудница} Правительства, чем могу Вам помочь?', configuration.main_settings.replaceash and 'ГЦЛ' or 'Правительства г. Сан-Фиерро'},
+										{'Доброй ночи, я {gender:сотрудник|сотрудница} %s, чем могу Вам помочь?', configuration.main_settings.replaceash and 'ГЦЛ' or 'Автошколы г. Сан-Фиерро'},
 										{'/do На груди висит бейджик с надписью %s %s.', configuration.RankNames[configuration.main_settings.myrankint], #configuration.main_settings.myname < 1 and gsub(sampGetPlayerNickname(select(2,sampGetPlayerIdByCharHandle(playerPed))), '_', ' ') or u8:decode(configuration.main_settings.myname)},
 									})
 								end
 							else
-								GOVHelperMessage('Данная команда доступна с 1-го ранга.')
+								ASHelperMessage('Данная команда доступна с 1-го ранга.')
 							end
 						end
 						if imgui.Button(fa.ICON_FA_FILE_ALT..u8' Озвучить прайс лист', imgui.ImVec2(285,30)) then
 							if configuration.main_settings.myrankint >= 1  then
 								sendchatarray(configuration.main_settings.playcd, {
-									{'/do В кармане брюк лежит прайс лист на лицензии.'},
+									{'/do В кармане брюк лежит прайс лист на услуги правительства.'},
 									{'/me {gender:достал|достала} прайс лист из кармана брюк и {gender:передал|передала} его клиенту'},
 									{'/do В прайс листе написано:'},
 									{'/do Выдача паспорта - %s$.', string.separate(configuration.main_settings.passprice or 2000)},
 									{'/do Смена даты рождения в паспорте - %s$.', string.separate(configuration.main_settings.passdrprice or 150000)},
 									{'/do Получение рабочей визы - %s$.', string.separate(configuration.main_settings.visaprice or 500000)},
 									{'/do Перевод транспорта в сертификат - %s$.', string.separate(configuration.main_settings.tstovcprice or 100000)},
-						
 								})
 							else
-								GOVHelperMessage('Данная команда доступна с 1-го ранга.')
+								ASHelperMessage('Данная команда доступна с 1-го ранга.')
 							end
 						end
-						if imgui.Button(fa.ICON_FA_FILE_SIGNATURE..u8' Услуги правительства', imgui.ImVec2(285,30)) then
+						if imgui.Button(fa.ICON_FA_FILE_SIGNATURE..u8' Продать лицензию игроку', imgui.ImVec2(285,30)) then
 							if configuration.main_settings.myrankint >= 3 then
 								imgui.SetScrollY(0)
 								Licenses_select[0] = 0
 								windowtype[0] = 1
 							else
 								sendchatarray(configuration.main_settings.playcd, {
-									{'/me {gender:взял|взяла} со стола бланк и {gender:заполнил|заполнила} ручкой бланк на получение нужного документа'},
-									{'/do Спустя некоторое время бланк на получение документа был заполнен.'},
-									{'/me достав нужный документ {gender:передал|передала} его человеку напротив'},
-									{'/n /givepass %s', fastmenuID},
+									{'/me {gender:взял|взяла} со стола бланк и {gender:заполнил|заполнила} ручкой бланк на получение лицензии на авто'},
+									{'/do Спустя некоторое время бланк на получение лицензии был заполнен.'},
+									{'/me распечатав лицензию на авто {gender:передал|передала} её человеку напротив'},
+									{'/n /givelicense %s', fastmenuID},
 								})
 							end
 						end
-						if imgui.Button(fa.ICON_FA_FILE_SIGNATURE..u8' Выгнать из Правительства', imgui.ImVec2(285,30)) then
+						if imgui.Button(fa.ICON_FA_REPLY..u8' Выгнать из автошколы', imgui.ImVec2(285,30)) then
 							imgui.OpenPopup('##changeexpelreason')
 						end
+						imgui.PushStyleVarVec2(imgui.StyleVar.WindowPadding, imgui.ImVec2(10, 10))
+						if imgui.BeginPopup('##changeexpelreason') then
+							imgui.Text(u8'Причина /expel:')
+							if imgui.InputText('##expelreasonbuff',usersettings.expelreason, sizeof(usersettings.expelreason)) then
+								configuration.main_settings.expelreason = u8:decode(str(usersettings.expelreason))
+								inicfg.save(configuration,'AS Helper')
+							end
+							if imgui.Button(u8'Выгнать', imgui.ImVec2(-1, 25)) then
 								if not sampIsPlayerPaused(fastmenuID) then
 									windows.imgui_fm[0] = false
 									sendchatarray(configuration.main_settings.playcd, {
@@ -1728,24 +1729,10 @@ local imgui_fm = imgui.OnFrame(
 										{'/expel %s %s', fastmenuID, configuration.main_settings.expelreason},
 									})
 								else
-									GOVHelperMessage('Игрок находится в АФК!')
+									ASHelperMessage('Игрок находится в АФК!')
 								end
 							end
 							imgui.EndPopup()
-							if imgui.Button(fa.ICON_FA_REPLY..u8' Услуги правительства', imgui.ImVec2(285,30)) then
-							imgui.OpenPopup('##changeexpelreason')
-						end
-								if not sampIsPlayerPaused(fastmenuID) then
-									windows.imgui_fm[0] = false
-									sendchatarray(configuration.main_settings.playcd, {
-									{'/me {gender:взял|взяла} со стола бланк и {gender:заполнил|заполнила} ручкой бланк на получение нужного документа'},
-									{'/do Спустя некоторое время бланк на получение документа был заполнен.'},
-									{'/me достав нужный документ {gender:передал|передала} его человеку напротив'},
-										{'/givepass %s', fastmenuID},
-									})
-								else
-									GOVHelperMessage('Игрок находится в АФК!')
-								end
 						end
 						imgui.PopStyleVar()
 						imgui.Button(fa.ICON_FA_USER_PLUS..u8' Принять в организацию', imgui.ImVec2(285,30))
@@ -1764,7 +1751,7 @@ local imgui_fm = imgui.OnFrame(
 									waitingaccept = fastmenuID
 								end
 							else
-								GOVHelperMessage('Данная команда доступна с 9-го ранга.')
+								ASHelperMessage('Данная команда доступна с 9-го ранга.')
 							end
 						end
 						imgui.Hint('invitehint','ЛКМ для принятия человека в организацию\nПКМ для принятия на должность Консультанта')
@@ -1776,7 +1763,7 @@ local imgui_fm = imgui.OnFrame(
 								imgui.StrCopy(blacklistbuf, '')
 								uninvitebox[0] = false
 							else
-								GOVHelperMessage('Данная команда доступна с 9-го ранга.')
+								ASHelperMessage('Данная команда доступна с 9-го ранга.')
 							end
 						end
 						if imgui.Button(fa.ICON_FA_EXCHANGE_ALT..u8' Изменить должность', imgui.ImVec2(285,30)) then
@@ -1785,7 +1772,7 @@ local imgui_fm = imgui.OnFrame(
 								Ranks_select[0] = 0
 								windowtype[0] = 4
 							else
-								GOVHelperMessage('Данная команда доступна с 9-го ранга.')
+								ASHelperMessage('Данная команда доступна с 9-го ранга.')
 							end
 						end
 						if imgui.Button(fa.ICON_FA_USER_SLASH..u8' Занести в чёрный список', imgui.ImVec2(285,30)) then
@@ -1794,7 +1781,7 @@ local imgui_fm = imgui.OnFrame(
 								windowtype[0] = 5
 								imgui.StrCopy(blacklistbuff, '')
 							else
-								GOVHelperMessage('Данная команда доступна с 9-го ранга.')
+								ASHelperMessage('Данная команда доступна с 9-го ранга.')
 							end
 						end
 						if imgui.Button(fa.ICON_FA_USER..u8' Убрать из чёрного списка', imgui.ImVec2(285,30)) then
@@ -1810,7 +1797,7 @@ local imgui_fm = imgui.OnFrame(
 									{'/unblacklist %s', fastmenuID},
 								})
 							else
-								GOVHelperMessage('Данная команда доступна с 9-го ранга.')
+								ASHelperMessage('Данная команда доступна с 9-го ранга.')
 							end
 						end
 						if imgui.Button(fa.ICON_FA_FROWN..u8' Выдать выговор сотруднику', imgui.ImVec2(285,30)) then
@@ -1819,7 +1806,7 @@ local imgui_fm = imgui.OnFrame(
 								imgui.StrCopy(fwarnbuff, '')
 								windowtype[0] = 6
 							else
-								GOVHelperMessage('Данная команда доступна с 9-го ранга.')
+								ASHelperMessage('Данная команда доступна с 9-го ранга.')
 							end
 						end
 						if imgui.Button(fa.ICON_FA_SMILE..u8' Снять выговор сотруднику', imgui.ImVec2(285,30)) then
@@ -1834,7 +1821,7 @@ local imgui_fm = imgui.OnFrame(
 									{'/unfwarn %s', fastmenuID},
 								})
 							else
-								GOVHelperMessage('Данная команда доступна с 9-го ранга.')
+								ASHelperMessage('Данная команда доступна с 9-го ранга.')
 							end
 						end
 						if imgui.Button(fa.ICON_FA_VOLUME_MUTE..u8' Выдать мут сотруднику', imgui.ImVec2(285,30)) then
@@ -1844,7 +1831,7 @@ local imgui_fm = imgui.OnFrame(
 								fmuteint[0] = 0
 								windowtype[0] = 7
 							else
-								GOVHelperMessage('Данная команда доступна с 9-го ранга.')
+								ASHelperMessage('Данная команда доступна с 9-го ранга.')
 							end
 						end
 						if imgui.Button(fa.ICON_FA_VOLUME_UP..u8' Снять мут сотруднику', imgui.ImVec2(285,30)) then
@@ -1853,14 +1840,14 @@ local imgui_fm = imgui.OnFrame(
 								sendchatarray(configuration.main_settings.playcd, {
 									{'/me {gender:достал|достала} планшет из кармана'},
 									{'/me {gender:включил|включила} планшет'},
-									{'/me {gender:перешёл|перешла} в раздел \'Управление сотрудниками Правительства'},
+									{'/me {gender:перешёл|перешла} в раздел \'Управление сотрудниками %s\'', configuration.main_settings.replaceash and 'ГЦЛ' or 'Автошколы'},
 									{'/me {gender:выбрал|выбрала} нужного сотрудника'},
 									{'/me {gender:выбрал|выбрала} пункт \'Включить рацию сотрудника\''},
 									{'/me {gender:нажал|нажала} на кнопку \'Сохранить изменения\''},
 									{'/funmute %s', fastmenuID},
 								})
 							else
-								GOVHelperMessage('Данная команда доступна с 9-го ранга.')
+								ASHelperMessage('Данная команда доступна с 9-го ранга.')
 							end
 						end
 						imgui.Separator()
@@ -1870,7 +1857,7 @@ local imgui_fm = imgui.OnFrame(
 								lastq[0] = 0
 								windowtype[0] = 8
 							else
-								GOVHelperMessage('Данное действие доступно с 5-го ранга.')
+								ASHelperMessage('Данное действие доступно с 5-го ранга.')
 							end
 						end
 						if imgui.Button(u8'Собеседование '..fa.ICON_FA_ELLIPSIS_V, imgui.ImVec2(285,30)) then
@@ -1886,7 +1873,7 @@ local imgui_fm = imgui.OnFrame(
 									licenses = nil
 								}
 							else
-								GOVHelperMessage('Данное действие доступно с 5-го ранга.')
+								ASHelperMessage('Данное действие доступно с 5-го ранга.')
 							end
 						end
 					imgui.EndGroup()
@@ -2627,34 +2614,15 @@ local imgui_fm = imgui.OnFrame(
 											{'/do В кармане брюк лежит прайс лист на лицензии.'},
 											{'/me {gender:достал|достала} прайс лист из кармана брюк и {gender:передал|передала} его клиенту'},
 											{'/do В прайс листе написано:'},
-											{'/do Лицензия на вождение автомобилей - %s$.', string.separate(configuration.main_settings.passprice or 5000)},
-											{'/do Лицензия на вождение мотоциклов - %s$.', string.separate(configuration.main_settings.passdrprice or 10000)},
-											{'/do Лицензия на рыболовство - %s$.', string.separate(configuration.main_settings.visaprice or 30000)},
-											{'/do Лицензия на водный транспорт - %s$.', string.separate(configuration.main_settings.tstovcprice or 30000)},
-											{'/do Лицензия на оружие - %s$.', string.separate(configuration.main_settings.gunaprice or 50000)},
-											{'/do Лицензия на охоту - %s$.', string.separate(configuration.main_settings.huntprice or 100000)},
-											{'/do Лицензия на раскопки - %s$.', string.separate(configuration.main_settings.kladprice or 200000)},
-											{'/do Лицензия на работу таксиста - %s$.', string.separate(configuration.main_settings.taxiprice or 250000)},
-											{'/do Лицензия на работу механика - %s$.', string.separate(configuration.main_settings.mechprice or 450000)},
+											{'/do Выдача паспорта - %s$.', string.separate(configuration.main_settings.passprice or 2000)},
+									        {'/do Смена даты рождения в паспорте - %s$.', string.separate(configuration.main_settings.passdrprice or 150000)},
+									        {'/do Получение рабочей визы - %s$.', string.separate(configuration.main_settings.visaprice or 500000)},
+									        {'/do Перевод транспорта в сертификат - %s$.', string.separate(configuration.main_settings.tstovcprice or 100000)},
 										})
 									end
 								else
 									imgui.LockedButton(fa.ICON_FA_FILE_ALT..u8' Озвучить прайс лист', imgui.ImVec2(285,30))
 									imgui.Hint('firstrangpricelist', 'С 1-го ранга')
-								end
-								if imgui.Button(fa.ICON_FA_FILE_SIGNATURE..u8' Продать лицензию игроку', imgui.ImVec2(285,30)) then
-									if configuration.main_settings.myrankint >= 3 then
-										imgui.SetScrollY(0)
-										Licenses_select[0] = 0
-										clienttype[0] = 1
-									else
-										sendchatarray(configuration.main_settings.playcd, {
-									{'/me {gender:взял|взяла} со стола бланк и {gender:заполнил|заполнила} ручкой бланк на получение нужного документа'},
-									{'/do Спустя некоторое время бланк на получение документа был заполнен.'},
-									{'/me достав нужный документ {gender:передал|передала} его человеку напротив'},
-									{'/n /givepass %s', fastmenuID},
-										})
-									end
 								end
 								if configuration.main_settings.myrankint >= 2 then
 									if imgui.Button(fa.ICON_FA_REPLY..u8' Выгнать из Правительства', imgui.ImVec2(285,30)) then
@@ -2687,34 +2655,6 @@ local imgui_fm = imgui.OnFrame(
 									imgui.Hint('secondrangexpel', 'С 2-го ранга')
 								end
 							imgui.EndGroup()
-						elseif clienttype[0] == 1 then
-							imgui.SetCursorPos(imgui.ImVec2(40,20))
-							imgui.Text(u8'Лицензия: ', imgui.ImVec2(75,30))
-							imgui.SameLine()
-							imgui.PushItemWidth(150)
-							imgui.SetCursorPosY(imgui.GetCursorPosY() - 3)
-							imgui.PushStyleVarVec2(imgui.StyleVar.WindowPadding,imgui.ImVec2(10,10))
-							imgui.Combo('##chooseselllicense', Licenses_select, new['const char*'][9](Licenses_Arr), #Licenses_Arr, imgui.ComboFlags.HeightLargest)
-							imgui.PopStyleVar()
-							imgui.PopItemWidth()
-							imgui.NewLine()
-							imgui.SetCursorPosX(7.5)
-							if imgui.Button(u8'Продать '..u8(string.rlower(u8:decode(Licenses_Arr[Licenses_select[0]+1]))), imgui.ImVec2(285,30)) then
-								local to, lic = fastmenuID, string.rlower(u8:decode(Licenses_Arr[Licenses_select[0]+1]))
-								if lic ~= nil and to ~= nil then
-									if (lic == 'оружие' and configuration.main_settings.checkmcongun) or (lic == 'охоту' and configuration.main_settings.checkmconhunt) then
-										sendchatarray(0, {
-											{'Хорошо, для покупки лицензии на %s покажите мне свою мед.карту', lic},
-											{'/n /showmc %s', select(2,sampGetPlayerIdByCharHandle(playerPed))},
-										}, function() sellto = to lictype = lic end, function() GOVHelperMessage('Началось ожидание показа мед.карты. При её отсутствии нажмите {MC}Alt{WC} + {MC}O{WC}') skiporcancel = lic tempid = to end)
-									else
-										sendchatarray(configuration.main_settings.playcd, {
-											{'/me {gender:взял|взяла} со стола бланк и {gender:заполнил|заполнила} ручкой бланк на получение лицензии на '..lic},
-											{'/do Спустя некоторое время бланк на получение %s.', lic},
-										}, function() sellto = to lictype = lic end, function() wait(1000) givelic = true sampSendChat(format('/givepass %s', to)) end)
-									end
-								end
-							end
 					
 
 							imgui.SetCursorPos(imgui.ImVec2(15,240))
@@ -3984,17 +3924,17 @@ local imgui_settings = imgui.OnFrame(
 										sampAddChatMessage('[D] '..configuration.RankNames[configuration.main_settings.myrankint]..' '..sampGetPlayerNickname(tonumber(myid))..'['..myid..']: Это сообщение видите только Вы!', join_argb(a, r, g, b))
 									end
 								
-									if imgui.ColorEdit4(u8'##SSet', chatcolors.COChatColor, imgui.ColorEditFlags.NoInputs + imgui.ColorEditFlags.NoAlpha) then
-										configuration.main_settings.COChatColor = imgui.ColorConvertFloat4ToU32(imgui.ImVec4(chatcolors.COChatColor[0], chatcolors.COChatColor[1], chatcolors.COChatColor[2], chatcolors.COChatColor[3]))
+									if imgui.ColorEdit4(u8'##SSet', chatcolors.GOVChatColor, imgui.ColorEditFlags.NoInputs + imgui.ColorEditFlags.NoAlpha) then
+										configuration.main_settings.GOVChatColor = imgui.ColorConvertFloat4ToU32(imgui.ImVec4(chatcolors.GOVChatColor[0], chatcolors.GOVChatColor[1], chatcolors.GOVChatColor[2], chatcolors.GOVChatColor[3]))
 										inicfg.save(configuration, 'GOV Helper.ini')
 									end
 									imgui.SameLine()
 									imgui.Text(u8'Цвет GOV Helper в чате')
 									imgui.SameLine(190)
 									if imgui.Button(u8'Сбросить##SCol',imgui.ImVec2(65,25)) then
-										configuration.main_settings.COChatColor = 4281558783
+										configuration.main_settings.GOVChatColor = 4286235135
 										if inicfg.save(configuration, 'GOV Helper.ini') then
-											chatcolors.COChatColor = vec4ToFloat4(imgui.ColorConvertU32ToFloat4(configuration.main_settings.COChatColor))
+											chatcolors.GOVChatColor = vec4ToFloat4(imgui.ColorConvertU32ToFloat4(configuration.main_settings.GOVChatColor))
 										end
 									end
 									imgui.SameLine(265)
@@ -4348,7 +4288,7 @@ local imgui_settings = imgui.OnFrame(
 									if configuration.Checker.state then
 										changePosition(configuration.Checker)
 									else
-										addNotify('Включите чекер.', 5)
+										GOVHelperMessage('Включите чекер.')
 									end
 								end
 								imgui.SameLine()
@@ -4674,7 +4614,8 @@ local imgui_settings = imgui.OnFrame(
 						imgui.BeginGroup()
 							if testCheat('dev') then
 								configuration.main_settings.myrankint = 10
-								addNotify('{20FF20}Режим разработчика включён.', 5)
+								GOVHelperMessage('{20FF20}Режим разработчика включён.')
+								
 								sampRegisterChatCommand('gh_temp',function()
 									fastmenuID = select(2, sampGetPlayerIdByCharHandle(playerPed))
 									windows.imgui_fm[0] = true
@@ -5386,76 +5327,6 @@ local imgui_notify = imgui.OnFrame(
 	end
 )
 
-local imgui_fmstylechoose = imgui.OnFrame(
-	function() return (windows.imgui_fmstylechoose[0] and not windows.imgui_changelog[0]) end,
-	function(player)
-		player.HideCursor = isKeyDown(0x12)
-		imgui.SetNextWindowSize(imgui.ImVec2(350, 225), imgui.Cond.FirstUseEver)
-		imgui.SetNextWindowPos(imgui.ImVec2(ScreenSizeX * 0.5 , ScreenSizeY * 0.5),imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
-		imgui.Begin(u8'Стиль меню быстрого доступа##fastmenuchoosestyle', _, imgui.WindowFlags.NoResize + imgui.WindowFlags.NoCollapse + imgui.WindowFlags.NoScrollbar)
-			imgui.TextWrapped(u8('В связи с добавлением нового стиля меню быстрого доступа, мы даём Вам выбрать какой стиль Вы предпочтёте использовать. Вы всегда сможете изменить его в /gh.\n\nДля предпросмотра нужно навести на одну из кнопок!'))
-			imgui.Spacing()
-			imgui.Columns(2, _, false)
-			imgui.SetCursorPosX(52.5)
-			imgui.Text(u8('Новый стиль'))
-			imgui.SetCursorPosX(72.5)
-			if imgui.RadioButtonIntPtr(u8('##newstylechoose'), usersettings.fmstyle, 1) then
-				configuration.main_settings.fmstyle = usersettings.fmstyle[0]
-				inicfg.save(configuration,'GOV Helper')
-			end
-			if imgui.IsItemHovered() then
-				imgui.SetNextWindowSize(imgui.ImVec2(200, 110))
-				imgui.PushStyleVarVec2(imgui.StyleVar.WindowPadding, imgui.ImVec2(0,0))
-				imgui.Begin('##newstyleshow', _, imgui.WindowFlags.Tooltip + imgui.WindowFlags.NoResize + imgui.WindowFlags.NoScrollbar + imgui.WindowFlags.NoTitleBar)
-					local p = imgui.GetCursorScreenPos()
-					for i = 0,3 do
-						imgui.GetWindowDrawList():AddRect(imgui.ImVec2(p.x + 5, p.y + 5 + i * 20), imgui.ImVec2(p.x + 115, p.y + 20 + i * 20), imgui.ColorConvertFloat4ToU32(imgui.GetStyle().Colors[imgui.Col.Border]), 5, nil, 1.9)
-						imgui.GetWindowDrawList():AddLine(imgui.ImVec2(p.x + 15, p.y + 12 + i * 20), imgui.ImVec2(p.x + 105, p.y + 12 + i * 20), imgui.ColorConvertFloat4ToU32(imgui.GetStyle().Colors[imgui.Col.Text]), 3)
-					end
-					imgui.GetWindowDrawList():AddLine(imgui.ImVec2(p.x + 120, p.y + 110), imgui.ImVec2(p.x + 120, p.y), imgui.ColorConvertFloat4ToU32(imgui.GetStyle().Colors[imgui.Col.Border]), 1)
-					imgui.GetWindowDrawList():AddLine(imgui.ImVec2(p.x + 120, p.y + 25), imgui.ImVec2(p.x + 200, p.y + 25), imgui.ColorConvertFloat4ToU32(imgui.GetStyle().Colors[imgui.Col.Border]), 1)
-					imgui.GetWindowDrawList():AddLine(imgui.ImVec2(p.x + 135, p.y + 8), imgui.ImVec2(p.x + 175, p.y + 8), imgui.ColorConvertFloat4ToU32(imgui.GetStyle().Colors[imgui.Col.Text]), 3)
-					imgui.GetWindowDrawList():AddLine(imgui.ImVec2(p.x + 178, p.y + 8), imgui.ImVec2(p.x + 183, p.y + 8), imgui.ColorConvertFloat4ToU32(imgui.GetStyle().Colors[imgui.Col.Text]), 3)
-					imgui.GetWindowDrawList():AddLine(imgui.ImVec2(p.x + 145, p.y + 18), imgui.ImVec2(p.x + 175, p.y + 18), imgui.ColorConvertFloat4ToU32(imgui.GetStyle().Colors[imgui.Col.Text]), 3)
-					imgui.GetWindowDrawList():AddLine(imgui.ImVec2(p.x + 190, p.y + 30), imgui.ImVec2(p.x + 190, p.y + 45), imgui.ColorConvertFloat4ToU32(imgui.GetStyle().Colors[imgui.Col.Border]), 2)
-					imgui.GetWindowDrawList():AddLine(imgui.ImVec2(p.x + 140, p.y + 37), imgui.ImVec2(p.x + 180, p.y + 37), imgui.ColorConvertFloat4ToU32(imgui.GetStyle().Colors[imgui.Col.Text]), 3)
-					for i = 1,3 do
-						imgui.GetWindowDrawList():AddLine(imgui.ImVec2(p.x + 140, p.y + 37 + i * 20), imgui.ImVec2(p.x + 180, p.y + 37 + i * 20), imgui.ColorConvertFloat4ToU32(imgui.GetStyle().Colors[imgui.Col.Text]), 3)
-					end
-				imgui.End()
-				imgui.PopStyleVar()
-			end
-			imgui.NextColumn()
-			imgui.SetCursorPosX(220)
-			imgui.Text(u8('Старый стиль'))
-			imgui.SetCursorPosX(245)
-			if imgui.RadioButtonIntPtr(u8('##oldstylechoose'), usersettings.fmstyle, 0) then
-				configuration.main_settings.fmstyle = usersettings.fmstyle[0]
-				inicfg.save(configuration,'GOV Helper')
-			end
-			if imgui.IsItemHovered() then
-				imgui.SetNextWindowSize(imgui.ImVec2(90, 150))
-				imgui.PushStyleVarVec2(imgui.StyleVar.WindowPadding, imgui.ImVec2(0,0))
-				imgui.Begin('##oldstyleshow', _, imgui.WindowFlags.Tooltip + imgui.WindowFlags.NoResize + imgui.WindowFlags.NoScrollbar + imgui.WindowFlags.NoTitleBar)
-					local p = imgui.GetCursorScreenPos()
-					for i = 0,6 do
-						imgui.GetWindowDrawList():AddRect(imgui.ImVec2(p.x + 5, p.y + 7 + i * 20), imgui.ImVec2(p.x + 85, p.y + 22 + i * 20), imgui.ColorConvertFloat4ToU32(imgui.GetStyle().Colors[imgui.Col.Border]), 5, nil, 1.9)
-						imgui.GetWindowDrawList():AddLine(imgui.ImVec2(p.x + 15, p.y + 14 + i * 20), imgui.ImVec2(p.x + 75, p.y + 14 + i * 20), imgui.ColorConvertFloat4ToU32(imgui.GetStyle().Colors[imgui.Col.Text]), 3)
-					end
-				imgui.End()
-				imgui.PopStyleVar()
-			end
-			imgui.Columns(1)
-			if configuration.main_settings.fmstyle ~= nil then
-				imgui.SetCursorPosX(125)
-				if imgui.Button(u8('Продолжить'), imgui.ImVec2(100, 23)) then
-					windows.imgui_fmstylechoose[0] = false
-				end
-			end
-		imgui.End()
-	end
-)
-
 local imgui_zametka = imgui.OnFrame(
 	function() return windows.imgui_zametka[0] end,
 	function(player)
@@ -5889,15 +5760,15 @@ function sampev.onServerMessage(color, message)
 			return false
 		end
 		if find(message, sampGetPlayerNickname(select(2, sampGetPlayerIdByCharHandle(playerPed)))..' переодевается в гражданскую одежду') then
-			addNotify('Вы закончили рабочий день,\nприятного отдыха!', 5)
+			GOVHelperMessage('Вы закончили рабочий день,\nприятного отдыха!')
 			return false
 		end
 		if find(message, sampGetPlayerNickname(select(2, sampGetPlayerIdByCharHandle(playerPed)))..' переодевается в рабочую одежду') then
-			addNotify('Вы начали рабочий день,\nудачной работы!', 5)
+			GOVHelperMessage('Вы начали рабочий день,\nудачной работы!')
 			return false
 		end
 		if find(message, '%[Информация%] {FFFFFF}Вы покинули пост!') then
-			addNotify('Вы покинули пост.', 5)
+			GOVHelperMessage('Вы покинули пост.')
 			return false
 		end
 	end
@@ -6134,11 +6005,11 @@ function checkServer(ip)
 end
 
 function GOVHelperMessage(text)
-	local col = imgui.ColorConvertU32ToFloat4(configuration.main_settings.COChatColor)
+	local col = imgui.ColorConvertU32ToFloat4(configuration.main_settings.GOVChatColor)
 	local r,g,b,a = col.x*255, col.y*255, col.z*255, col.w*255
 	text = gsub(text, '{WC}', '{EBEBEB}')
 	text = gsub(text, '{MC}', format('{%06X}', bit.bor(bit.bor(b, bit.lshift(g, 8)), bit.lshift(r, 16))))
-	sampAddChatMessage(format('[GOVHelper]{EBEBEB} %s', text),join_argb(a, r, g, b)) -- ff6633 default
+	sampAddChatMessage(format('[GOVHelper]{EBEBEB} %s', text),join_argb(a, r, g, b)) -- ffc17a default
 end
 
 function onWindowMessage(msg, wparam, lparam)
@@ -6203,10 +6074,10 @@ function onScriptTerminate(script, quitGame)
 			i = i + 1
 		end
 
-		sampShowDialog(536472, '{ff6633}[GOV Helper]{ffffff} Скрипт был выгружен сам по себе.', [[
+		sampShowDialog(536472, '{ffc17a}[GOV Helper]{ffffff} Скрипт был выгружен сам по себе.', [[
 {f51111}Если Вы самостоятельно перезагрузили скрипт, то можете закрыть это диалоговое окно.
 В ином случае, для начала попытайтесь восстановить работу скрипта сочетанием клавиш CTRL + R.
-Если же это не помогло, то следуйте дальнейшим инструкциям.{ff6633}
+Если же это не помогло, то следуйте дальнейшим инструкциям.{ffc17a}
 1. Возможно у Вас установлены конфликтующие LUA файлы и хелперы, попытайтесь удалить их.
 2. Возможно Вы не доустановили некоторые нужные библиотеки, а именно:
  - SAMPFUNCS 5.5.1
@@ -6216,7 +6087,7 @@ function onScriptTerminate(script, quitGame)
 - В папке moonloader > config > Удаляем файл GOV Helper.ini
 - В папке moonloader > Удаляем папку GOV Helper
 4. Если ничего из вышеперечисленного не исправило ошибку, то следует установить скрипт на другую сборку.
-5. Если даже это не помогло Вам, то отправьте автору {2594CC}(vk.com/maks.weeb){FF6633} скриншот ошибки.{FFFFFF}
+5. Если даже это не помогло Вам, то отправьте автору {2594CC}(vk.com/maks.weeb){ffc17a} скриншот ошибки.{FFFFFF}
 ———————————————————————————————————————————————————————
 {C0C0C0}]]..moonlog, 'ОК', nil, 0)
 	end
@@ -6325,7 +6196,7 @@ function checkRules()
 		end
 	end
 
-	local json_url = 'https://github.com/dragon-el/GOV-Helper/raw/main/Rules/rules.json'
+	local json_url = 'https://raw.githubusercontent.com/dragon-el/GOV-Helper/main/Jsons/rules.json'
 	local json = getWorkingDirectory() .. '\\'..thisScript().name..'-rules.json'
 
 	if doesFileExist(json) then
@@ -6450,10 +6321,10 @@ function checkUpdates(json_url, show_notify)
 					f:close()
 					os.remove(json)
 					if updateversion ~= thisScript().version then
-						addNotify('Обнаружено обновление на\nверсию {MC}'..updateversion..'{WC}. Подробности:\n{MC}/ghupd', 5)
+						GOVHelperMessage('Обнаружено обновление на версию {MC}'..updateversion..'{WC}. Подробности:{MC}/ghupd')
 					else
 						if show_notify then
-							addNotify('Обновлений не обнаружено!', 5)
+							GOVHelperMessage('Обновлений не обнаружено!')
 						end
 					end
 					if configuration.main_settings.getbetaupd and info.beta_upd then
@@ -6509,7 +6380,7 @@ function main()
 	getmyrank = true
 	sampSendChat('/stats')
 	print('{00FF00}Успешная загрузка')
-	addNotify(format('Успешная загрузка скрипта,\nверсия {MC}%s{WC}.\nНастроить скрипт: {MC}/gh', thisScript().version), 10)
+	GOVHelperMessage('Успешная загрузка скрипта,версия {MC}1.0.1{WC}.Настроить скрипт: {MC}/gh') --ВЕРСИЯ
 
 	if configuration.main_settings.changelog then
 		windows.imgui_changelog[0] = true
@@ -6530,13 +6401,14 @@ function main()
 	end)
 	sampRegisterChatCommand('ghlect', function()
 		if configuration.main_settings.myrankint < 5 then
-			return addNotify('Данная функция доступна с 5-го\nранга.', 5)
+			return GOVHelperMessage('Данная функция доступна с 5-го ранга.')
+			
 		end
 		windows.imgui_lect[0] = not windows.imgui_lect[0]
 	end)
 	sampRegisterChatCommand('ghdep', function()
 		if configuration.main_settings.myrankint < 5 then
-			return addNotify('Данная функция доступна с 5-го\nранга.', 5)
+			return GOVHelperMessage('Данная функция доступна с 5-го ранга.')
 		end
 		windows.imgui_depart[0] = not windows.imgui_depart[0]
 	end)
@@ -6585,6 +6457,28 @@ function main()
 				{'/uninvite %s %s', uvalid, reason},
 			})
 		end
+	end)
+	
+		sampRegisterChatCommand('givepass', function(param)
+		if not configuration.main_settings.dorponcmd then
+			return sampSendChat(format('/givepass %s',param))
+		end
+		if configuration.main_settings.myrankint < 2 then
+			return GOVHelperMessage('Данная команда доступна с 3-го ранга.')
+		end
+		local id = param:match('(%d+)')
+		if id == nil then
+			return GOVHelperMessage('/givepass [id]')
+		end
+		return sendchatarray(configuration.main_settings.playcd, {
+			{'/do В сумке на плече лежат бланки для выдачи документов.'},
+			{'/me всунув руку в сумку, {gender:достал|достала} бланк'},
+			{'/me {gender:заполнил|заполнила} бланк'},
+			{'/do Спустя некоторое время документ был готов.'},
+			{'/todo Вот ваш документ*передавая документ клиенту'},
+			{'Всего доброго!'},
+			{'/givepass %s', id},
+		})
 	end)
 
 	sampRegisterChatCommand('invite', function(param)
