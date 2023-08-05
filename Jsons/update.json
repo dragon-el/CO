@@ -1,7 +1,7 @@
 {
     "file":"https://raw.githubusercontent.com/Just-Mini/ASHelper/main/AS%20Helper.lua",
-    "version":"1.0.1",
-    "change_log":"Убрана зависимость от lfs\nУбрана зависимость от PNG файлов, теперь они находятся закодированными\nИзменена система подгрузки правил сервера\nУбраны некоторые ненужные функции\nОбновлены все правила серверов на актуальные",
+    "version":"1.0.2",
+    "change_log":"Обновлены правила на актуальные/n",
     "beta_upd":false,
     "beta_file":"https://raw.githubusercontent.com/Just-Mini/ASHelper/main/AS%20Helper%20beta.lua",
     "beta_version":"3.1 beta",
